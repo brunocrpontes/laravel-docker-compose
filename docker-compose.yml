@@ -81,3 +81,22 @@ services:
         condition: service_healthy
     ports: 
       - "8080:8080"
+  
+  mysql:
+    image: mysql:5.7.22
+    command: --innodb-use-native-aio=0
+    restart: always
+    ports:
+      - "3308:3306"
+    volumes:
+      - "./.docker/dbdata:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: mysqlbd
+      MYSQL_ROOT_PASSWORD: root
+
+  app:
+    build: .
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql

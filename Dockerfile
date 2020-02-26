@@ -13,4 +13,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 EXPOSE 9000
 
-ENTRYPOINT [ "php-fpm" ]
+CMD php -S 0.0.0.0:9000 -t public

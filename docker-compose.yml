@@ -75,28 +75,20 @@ services:
       - kong_data:/var/lib/postgresql/data
   
   dashboard:
-    image: pgbi/kong-dashboard:v2
+    image: pantsel/konga
     depends_on:
       kong:
         condition: service_healthy
-    ports: 
-      - "8080:8080"
-  
-  mysql:
-    image: mysql:5.7.22
-    command: --innodb-use-native-aio=0
-    restart: always
-    ports:
-      - "3308:3306"
-    volumes:
-      - "./.docker/dbdata:/var/lib/mysql"
     environment:
-      MYSQL_DATABASE: mysqlbd
-      MYSQL_ROOT_PASSWORD: root
-
-  app:
-    build: .
+      NODE_ENV: production
+    stdin_open: true
+    ports:
+      - 1337:1337/tcp
     volumes:
-      - ./:/var/www
-    depends_on:
-      - mysql
+    - /var/data/konga:/app/kongadata
+    tty: true
+    links:
+    - kong:kong
+    networks:
+      - kong-net
+

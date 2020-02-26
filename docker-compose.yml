@@ -1,0 +1,31 @@
+
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:11
+    restart: always
+    ports:
+      - '5432:5432'
+    # volumes:
+    #   - "./dbdata:/var/lib/mysql"
+    environment:
+      POSTGRES_DB: apiGetwary
+      POSTGRES_USER: apiUser
+      POSTGRES_PASSWORD: api123
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - app
